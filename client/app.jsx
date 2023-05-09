@@ -11,9 +11,9 @@ function App() {
       style={{ padding: 0, margin: 0, boxSizing: 'border-box' }}
     >
       <Routes>
-        <Route path='/' element={<Home />} />
+        <Route path='/' element={<Main />} />
         <Route path='/newjob' element={<NewJob />} />
-        <Route path='/home' element={<Main />} />
+        <Route path='/home' element={<Home />} />
       </Routes>
     </div>
   );

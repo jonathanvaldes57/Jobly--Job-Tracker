@@ -26,10 +26,6 @@ module.exports = {
     },
     historyApiFallback: true,
   },
-  // resolve: {
-  //   extensions: ['.js', '.jsx'],
-  //   modules: [path.resolve(__dirname, 'node_modules')],
-  // },
   mode: process.env.NODE_ENV,
   module: {
     rules: [
