@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Card,
@@ -45,10 +46,15 @@ const styles = {
 const Home = () => {
   const [open, setOpen] = useState(false);
   const [option, setOption] = useState('');
+  const navigate = useNavigate();
   return (
     <Box sx={styles.root}>
       <AppBar position='fixed' sx={styles.appBar}>
-        <Toolbar sx={styles.title}>Welcome!</Toolbar>
+        <Toolbar sx={styles.title}>
+          <Button onClick={() => navigate('/')} sx={{ color: 'white' }}>
+            Welcome!
+          </Button>
+        </Toolbar>
       </AppBar>
       <Box sx={styles.container}>
         <Grid container spacing={0}>
