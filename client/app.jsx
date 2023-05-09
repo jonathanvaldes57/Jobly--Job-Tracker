@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import NewJob from './components/newJob.jsx';
+import Login from './pages/Login.jsx';
 import Main from './components/Main.jsx';
 import Home from './pages/Home.jsx';
+import Signup from './pages/Signup.jsx';
 
 function App() {
   return (
@@ -12,7 +13,8 @@ function App() {
     >
       <Routes>
         <Route path='/' element={<Main />} />
-        <Route path='/newjob' element={<NewJob />} />
+        <Route path='/login' element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
         <Route path='/home' element={<Home />} />
       </Routes>
     </div>

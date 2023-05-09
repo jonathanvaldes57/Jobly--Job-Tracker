@@ -69,11 +69,11 @@ const styles = {
 };
 
 export default function BasicModal({ open, setOpen, option, setOption }) {
-  const handleClose = () => setOpen(false);
   const [company, setCompany] = useState('');
   const [jobTitle, setJobTitle] = useState('');
   const [interest, setInterest] = useState('');
   const [link, setLink] = useState('');
+
   const handleCancel = () => {
     setOpen(false);
     setCompany('');
@@ -81,29 +81,34 @@ export default function BasicModal({ open, setOpen, option, setOption }) {
     setInterest('');
     setLink('');
   };
+
   const handleSubmit = () => {
-    // api call here
-    if (!company || !jobTitle || !interest || !link) {
+    if (!company || !jobTitle || !interest || !link || !option) {
       return;
     } else {
       setOpen(false);
-      console.log(
-        {
-            userId: "ffasdf8f90434",
-            company: company,
-            jobTitle: jobTitle,
-            interest: interest,
-            link: link
-        }
-      )
+      //fetch request happens here
+      setCompany('');
+      setJobTitle('');
+      setInterest('');
+      setLink('');
     }
   };
+
+//   const handleClose = () => {
+//     console.log('in herer')
+//     setOpen(false);
+//     setCompany('');
+//     setJobTitle('');
+//     setInterest('');
+//     setLink('');
+//   }
 
   return (
     <div>
       <Modal
         open={open}
-        onClose={handleClose}
+        // onClose={handleClose}
         aria-labelledby='modal-modal-title'
         aria-describedby='modal-modal-description'
       >
@@ -129,6 +134,7 @@ export default function BasicModal({ open, setOpen, option, setOption }) {
                 onChange={(e) => setCompany(e.target.value)}
               />
               <TextField
+                required
                 sx={styles.input}
                 label='Job Title'
                 variant='outlined'
@@ -137,6 +143,7 @@ export default function BasicModal({ open, setOpen, option, setOption }) {
                 onChange={(e) => setJobTitle(e.target.value)}
               />
               <TextField
+                required
                 sx={styles.input}
                 label='Link'
                 variant='outlined'
@@ -150,6 +157,7 @@ export default function BasicModal({ open, setOpen, option, setOption }) {
                   Interest Level
                 </InputLabel>
                 <Select
+                  required
                   sx={styles.input}
                   value={interest}
                   label='Interest Level'
