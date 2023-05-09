@@ -29,12 +29,15 @@ import {
   };
 
 function Main(){
+  const navigate = useNavigate();
     return (
         <Box sx={styles.root}>
             <AppBar position='fixed' sx={styles.appBar}>
                 <Toolbar sx={styles.title}>
-                    <p>Welcome!</p>
-                    <Link style={{textDecoration: 'none', color: 'white'}} to="/login">Login</Link>
+                    <Button onClick={() => navigate('/')} sx={{ color: 'white' }}>
+                     Welcome!
+                    </Button>
+                    <Button onClick={() => navigate('/login')} sx={{color: 'white'}}>login</Button>
                 </Toolbar>
             </AppBar>
             <p style={{marginTop: '100px'}}>this is the landing page</p>
