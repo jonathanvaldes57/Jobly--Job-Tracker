@@ -1,5 +1,6 @@
- const express = require('express');
+const express = require('express');
 const path = require('path');
+const userRouter = require('./routes/userRoutes');
 
 const app = express();
 app.use(express.json());
@@ -7,13 +8,16 @@ app.use(express.json());
 // app.use(express.static(path.join(__dirname, './../client')));
 app.use(express.static(path.join(__dirname, './../build')));
 
+//routes
+app.use('/user', userRouter);
+
 //allows refresh and direct navigation for react router
-app.get('/*', function(req, res) {
-  res.sendFile(path.join(__dirname, '../build/index.html'), function(err) {
+app.get('/*', function (req, res) {
+  res.sendFile(path.join(__dirname, '../build/index.html'), function (err) {
     if (err) {
-      res.status(500).send(err)
+      res.status(500).send(err);
     }
-  })
-})
+  });
+});
 
 app.listen(3000, () => console.log('listening to 3000'));
