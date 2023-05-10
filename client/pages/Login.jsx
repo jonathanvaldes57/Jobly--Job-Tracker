@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import GoogleButton from 'react-google-button';
+import axios from 'axios'
 import {
   Box,
   Card,
@@ -43,18 +45,21 @@ const styles = {
 };
 
 function Login() {
-  // const [isLoggedIn, setIsLoggedIn] = useState(true);
-  // useEffect(() => {
-  //   if (isLoggedIn) {
-  //     navigate('/home');
-  //   }
-  // }, []);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
   const handleClick = () => {
     //fetch request here
+  };
+
+  const handleGoogle = async () => {
+    try{
+      await axios.get('https/localhost8080/test')
+    }
+    catch(err){
+      console.log('error in google auth' , err)
+    }
   };
 
   return (
@@ -94,19 +99,20 @@ function Login() {
           fullWidth
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button variant='contained' size='large' onClick={handleClick}>
+        <Button sx={{margin: '15px'}} variant='contained' size='large' onClick={handleClick}>
           Submit
         </Button>
+        <GoogleButton onClick={handleGoogle} style={{ margin: '10px', marginLeft: '70px' }} />
         <Typography
           sx={{
             mb: '16px',
             textAlign: 'center',
-            marginTop: '10px',
+            marginTop: '25px',
           }}
         >
           Don't have an account?
         </Typography>
-        <Button onClick={() => navigate('/signup')}>Sign up here</Button>
+        <Button style={{marginTop: '-20px'}}onClick={() => navigate('/signup')}>Sign up here</Button>
       </Card>
     </Box>
   );
