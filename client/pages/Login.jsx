@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import GoogleButton from 'react-google-button';
-import axios from 'axios'
+import axios from 'axios';
 import AuthContext from '../AuthContext.jsx';
 
 import {
@@ -53,11 +53,10 @@ function Login() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const { setUser } = useContext(AuthContext);
-  
-  const handleGoogleClick = () => {
-    window.open(`http://localhost:3000/auth/google`, '_self');
-  };
 
+  const handleGoogleClick = () => {
+    window.open(`http://localhost:3000/auth/google`, '_blank');
+  };
 
   return (
     <Box sx={styles.root}>
@@ -96,11 +95,11 @@ function Login() {
           fullWidth
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button sx={{margin: '15px'}} variant='contained' size='large'  >
+        <Button sx={{ margin: '15px' }} variant='contained' size='large'>
           Submit
         </Button>
 
-{/*      
+        {/*      
         <a
           href='http://localhost:3000/auth/google'
           target='_self'
@@ -108,11 +107,14 @@ function Login() {
           style={{textDecoration: 'none'}}
         >
        */}
-       
-          <GoogleButton style={{marginLeft: '70px'}} onClick={handleGoogleClick}>
-          Sign in with Google 
-          </GoogleButton>
-            
+
+        <GoogleButton
+          style={{ marginLeft: '70px' }}
+          onClick={handleGoogleClick}
+        >
+          Sign in with Google
+        </GoogleButton>
+
         {/* </a> */}
 
         <Typography
@@ -124,7 +126,12 @@ function Login() {
         >
           Don't have an account?
         </Typography>
-        <Button style={{marginTop: '-20px'}}onClick={() => navigate('/signup')}>Sign up here</Button>
+        <Button
+          style={{ marginTop: '-20px' }}
+          onClick={() => navigate('/signup')}
+        >
+          Sign up here
+        </Button>
       </Card>
     </Box>
   );
