@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Job from '../components/Job.jsx'
+import axios from 'axios';
 import {
   Box,
   Card,
@@ -29,6 +31,7 @@ const styles = {
     height: 'calc(98vh - 64px)',
     border: '1px solid #ccc',
     boxSizing: 'border-box',
+    overflowY: "scroll"
   },
   container: {
     marginTop: '58px',
@@ -46,7 +49,26 @@ const styles = {
 const Home = () => {
   const [open, setOpen] = useState(false);
   const [option, setOption] = useState('');
+  const [jobs, setJobs] = useState({
+    applied: [],
+    interview: [],
+    offer: [],
+    rejected: [],
+  });
+  const [fetching, setFetching] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const response = axios
+      .post('http://localhost:8080/job/getjobs', { user_id: '1' })
+      .then((response) => {
+        setJobs(response.data);
+        console.log('this is data', response.data);
+      })
+
+      .catch((e) => console.log(e));
+  }, [fetching]);
+
   return (
     <Box sx={styles.root}>
       <AppBar position='fixed' sx={styles.appBar}>
@@ -75,6 +97,11 @@ const Home = () => {
                 <AddIcon />
               </Button>
             </Card>
+           
+            {jobs.applied?.map((job, index) => {
+                return <Job job={job} key={index} />
+              })}
+             
           </Grid>
           <Grid item xs={3} sx={styles.column}>
             <Card sx={styles.card}>
@@ -93,6 +120,11 @@ const Home = () => {
                 <AddIcon />
               </Button>
             </Card>
+            {jobs.interview?.map((job, index) => {
+                return <Job job={job} key={index} />
+              })}
+
+
           </Grid>
           <Grid item xs={3} sx={styles.column}>
             <Card sx={styles.card}>
@@ -110,7 +142,13 @@ const Home = () => {
               >
                 <AddIcon />
               </Button>
+              
             </Card>
+
+            {jobs.offer?.map((job, index) => {
+                return <Job job={job} key={index} />
+              })}
+        
           </Grid>
           <Grid item xs={3} sx={styles.column}>
             <Card sx={styles.card}>
@@ -129,10 +167,22 @@ const Home = () => {
                 <AddIcon />
               </Button>
             </Card>
+
+            {jobs.rejected?.map((job, index) => {
+                return <Job job={job} key={index} />
+              })}
+            
           </Grid>
         </Grid>
       </Box>
-      <AddModal open={open} setOpen={setOpen} option={option} setOption={setOption}/>
+      <AddModal
+        open={open}
+        setOpen={setOpen}
+        option={option}
+        setOption={setOption}
+        setFetching={setFetching}
+        fetching={fetching}
+      />
     </Box>
   );
 };

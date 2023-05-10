@@ -2,6 +2,7 @@ const db = require('../models/job-tracker-Models');
 
 const JobController = {
   async createJob(req, res, next) {
+    console.log('this is reques body', req.body)
     const {
       company_name,
       job_title,
@@ -40,26 +41,27 @@ const JobController = {
   },
 
   async getJobs(req, res, next) {
-    const { users_id } = req.body;
+    const { user_id } = req.body;
+    
     try {
       const applied = await db.query(
         `
-            SELECT * from jobs where users_id = '${users_id}' AND status = 'applied';
+            SELECT * from jobs where users_id = '${user_id}' AND status = 'applied';
         `
       );
       const interview = await db.query(
         `
-            SELECT * from jobs where users_id = '${users_id}' AND status = 'interview';
+            SELECT * from jobs where users_id = '${user_id}' AND status = 'interview';
         `
       );
       const offer = await db.query(
         `
-            SELECT * from jobs where users_id = '${users_id}' AND status = 'offer';
+            SELECT * from jobs where users_id = '${user_id}' AND status = 'offer';
         `
       );
       const rejected = await db.query(
         `
-            SELECT * from jobs where users_id = '${users_id}' AND status = 'rejected';
+            SELECT * from jobs where users_id = '${user_id}' AND status = 'rejected';
         `
       );
       res.locals.jobs = {

@@ -34,6 +34,7 @@
     "pg": "^8.10.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-google-button": "^0.7.2",
     "react-router-dom": "^6.10.0",
     "sequelize": "^6.31.1",
     "sqlite3": "^5.1.6",

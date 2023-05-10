@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import GoogleButton from 'react-google-button';
+import axios from 'axios'
 import AuthContext from '../AuthContext.jsx';
+
 import {
   Box,
   Card,
@@ -44,12 +48,6 @@ const styles = {
 };
 
 function Login() {
-  // const [isLoggedIn, setIsLoggedIn] = useState(true);
-  // useEffect(() => {
-  //   if (isLoggedIn) {
-  //     navigate('/home');
-  //   }
-  // }, []);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -57,6 +55,7 @@ function Login() {
   const handleClick = () => {
     window.open(`http://localhost:3000/auth/google`, '_self');
   };
+
 
   return (
     <Box sx={styles.root}>
@@ -95,9 +94,12 @@ function Login() {
           fullWidth
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button variant='contained' size='large' onClick={handleClick}>
+        <Button sx={{margin: '15px'}} variant='contained' size='large' onClick={handleClick}>
           Submit
         </Button>
+
+     
+
         <a
           href='http://localhost:3000/auth/google'
           target='_self'
@@ -107,16 +109,17 @@ function Login() {
             Sign in with Google
           </Button>
         </a>
+
         <Typography
           sx={{
             mb: '16px',
             textAlign: 'center',
-            marginTop: '10px',
+            marginTop: '25px',
           }}
         >
           Don't have an account?
         </Typography>
-        <Button onClick={() => navigate('/signup')}>Sign up here</Button>
+        <Button style={{marginTop: '-20px'}}onClick={() => navigate('/signup')}>Sign up here</Button>
       </Card>
     </Box>
   );

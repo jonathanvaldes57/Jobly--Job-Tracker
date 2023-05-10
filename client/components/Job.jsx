@@ -1,122 +1,91 @@
-import * as React from 'react';
-import { useEffect, useState } from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
-import axios from 'axios';
+import { useState } from 'react';
 import {
   Card,
+  CardMedia,
+  CardHeader,
+  Typography,
+  IconButton,
+  Modal,
+  Box,
   CardContent,
   TextField,
-  InputLabel,
-  MenuItem,
-  Select,
   FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Button
 } from '@mui/material';
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  p: 4,
-};
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import React from 'react';
 
 const styles = {
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100vh',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    overflow: 'hidden',
-  },
-  card: {
-    backgroundColor: 'transparent',
-    backdropFilter: 'blur(24px) brightness(125%)',
-    borderRadius: '8px',
-    maxWidth: '400px',
-    width: '100%',
-    backgroundColor: 'white',
-    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
-    padding: '16px',
-  },
-  input: {
-    marginBottom: '16px',
-  },
-  submitButton: {
-    marginTop: '16px',
-    marginBottom: '8px',
-    backgroundColor: '#227BA5',
-    color: '#ffffff',
-    '&:hover': {
-      backgroundColor: '#1D6490',
+    root: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '100vh',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      overflow: 'hidden',
     },
-  },
-  signupLink: {
-    color: '##227BA5',
-    textDecoration: 'none',
-    '&:hover': {
-      textDecoration: 'underline',
+    card: {
+      backgroundColor: 'transparent',
+      backdropFilter: 'blur(24px) brightness(125%)',
+      borderRadius: '8px',
+      maxWidth: '400px',
+      width: '100%',
+      backgroundColor: 'white',
+      boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
+      padding: '16px',
     },
-    cursor: 'pointer',
-  },
-};
-
-export default function BasicModal({ open, setOpen, option, setOption, setFetching, fetching }) {
-  const [company, setCompany] = useState('');
-  const [jobTitle, setJobTitle] = useState('');
-  const [interest, setInterest] = useState('');
-  const [link, setLink] = useState('');
-  // const [date, setDate] = useState('');
-
-  const handleCancel = () => {
-    setOpen(false);
-    setCompany('');
-    setJobTitle('');
-    setInterest('');
-    setLink('');
+    input: {
+      marginBottom: '16px',
+    },
+    submitButton: {
+      marginTop: '16px',
+      marginBottom: '8px',
+      backgroundColor: '#227BA5',
+      color: '#ffffff',
+      '&:hover': {
+        backgroundColor: '#1D6490',
+      },
+    },
+    signupLink: {
+      color: '##227BA5',
+      textDecoration: 'none',
+      '&:hover': {
+        textDecoration: 'underline',
+      },
+      cursor: 'pointer',
+    },
   };
 
-  const handleSubmit = async () => {
-    if (!company || !jobTitle || !interest || !link || !option) {
-      return;
-    } else {
-      try{
-        
-        const response = await axios.post('http://localhost:8080/job/createjob', {company_name: company, job_title: jobTitle, interest_level: interest, status: option, url: link, date: '5/10/23', description: 'some description', users_id: 1})
+  
+const Job = ({ job }) => {
+    const [open, setOpen] = useState(false)
+    const handleClose = () => setOpen(false)
+    const handleCancel = () => setOpen(false)
+    const handleSubmit = () => console.log('submit')
+    const [interest_level, setInterest_level] = useState(job.interest_level);
+    const [status, setStatus] = useState(job.status);
+    const [company_name, setCompanyName] = useState(job.company_name);
+    const [job_title, setJob_Title] = useState(job.job_title);
+    const [url, setUrl] = useState(job.url);
+    const [description, setDescription] = useState(job.description)
 
-      }
-      catch(err){
-        console.log('error in post to createjob', err)
-      }
-      setOpen(false);
-      setCompany('');
-      setJobTitle('');
-      setInterest('');
-      setLink('');
-      setFetching(!fetching)
-    }
-  };
-
-//   const handleClose = () => {
-//     console.log('in herer')
-//     setOpen(false);
-//     setCompany('');
-//     setJobTitle('');
-//     setInterest('');
-//     setLink('');
-//   }
-
-  return (
-    <div>
-      <Modal
+  return ( 
+    <Card sx={{ boxShadow: 3, height: "110px", margin: '10px' }}>
+      <CardHeader
+        title={job.company_name}
+        subheader={job.job_title}
+        action={
+          <IconButton aria-label='settings'>
+            <MoreVertIcon onClick={() => setOpen(true)}/>
+          </IconButton>
+        }
+      />
+  <Modal
         open={open}
         // onClose={handleClose}
         aria-labelledby='modal-modal-title'
@@ -132,7 +101,7 @@ export default function BasicModal({ open, setOpen, option, setOption, setFetchi
                   textAlign: 'center',
                 }}
               >
-                Enter Job Information
+                Edit Job
               </Typography>
               <TextField
                 required
@@ -140,6 +109,7 @@ export default function BasicModal({ open, setOpen, option, setOption, setFetchi
                 label='Company Name'
                 variant='outlined'
                 size='small'
+                value={company_name}
                 fullWidth
                 onChange={(e) => setCompany(e.target.value)}
               />
@@ -148,6 +118,7 @@ export default function BasicModal({ open, setOpen, option, setOption, setFetchi
                 sx={styles.input}
                 label='Job Title'
                 variant='outlined'
+                value={job_title}
                 size='small'
                 fullWidth
                 onChange={(e) => setJobTitle(e.target.value)}
@@ -159,6 +130,7 @@ export default function BasicModal({ open, setOpen, option, setOption, setFetchi
                 variant='outlined'
                 size='small'
                 fullWidth
+                value={url}
                 onChange={(e) => setLink(e.target.value)}
               />
 
@@ -169,7 +141,7 @@ export default function BasicModal({ open, setOpen, option, setOption, setFetchi
                 <Select
                   required
                   sx={styles.input}
-                  value={interest}
+                  value={interest_level}
                   label='Interest Level'
                   size='small'
                   onChange={(e) => setInterest(e.target.value)}
@@ -185,10 +157,10 @@ export default function BasicModal({ open, setOpen, option, setOption, setFetchi
                 <InputLabel sx={{ marginTop: '-5px' }}>Status</InputLabel>
                 <Select
                   sx={styles.input}
-                  value={option}
+                  value={status}
                   label='Status'
                   size='small'
-                  onChange={(e) => setOption(e.target.value)}
+                  onChange={(e) => setStatus(e.target.value)}
                 >
                   <MenuItem value={'applied'}>Applied</MenuItem>
                   <MenuItem value={'interview'}>Interview</MenuItem>
@@ -196,7 +168,18 @@ export default function BasicModal({ open, setOpen, option, setOption, setFetchi
                   <MenuItem value={'rejected'}>Rejected</MenuItem>
                 </Select>
               </FormControl>
-
+              <TextField
+                required
+                sx={styles.input}
+                label='Description'
+                variant='outlined'
+                size='small'
+                multiline
+                fullWidth
+                value={description}
+                rows={4}
+                onChange={(e) => setDescription(e.target.value)}
+              />
               <Box
                 sx={{
                   display: 'flex',
@@ -213,13 +196,16 @@ export default function BasicModal({ open, setOpen, option, setOption, setFetchi
                   Cancel
                 </Button>
                 <Button variant='contained' size='large' onClick={handleSubmit}>
-                  Add
+                  Submit
                 </Button>
               </Box>
             </CardContent>
           </Card>
         </Box>
       </Modal>
-    </div>
+    </Card>
+    
   );
-}
+};
+
+export default Job;
