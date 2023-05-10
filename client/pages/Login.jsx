@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import AuthContext from '../AuthContext.jsx';
 import {
   Box,
   Card,
@@ -52,9 +53,9 @@ function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-
+  const { setUser } = useContext(AuthContext);
   const handleClick = () => {
-    //fetch request here
+    window.open(`http://localhost:3000/auth/google`, '_self');
   };
 
   return (
@@ -97,6 +98,15 @@ function Login() {
         <Button variant='contained' size='large' onClick={handleClick}>
           Submit
         </Button>
+        <a
+          href='http://localhost:3000/auth/google'
+          target='_self'
+          rel='noopener noreferrer'
+        >
+          <Button variant='contained' size='large'>
+            Sign in with Google
+          </Button>
+        </a>
         <Typography
           sx={{
             mb: '16px',
