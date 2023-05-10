@@ -10,7 +10,11 @@ router.post('/getjobs', JobController.getJobs, (req, res) => {
   res.status(200).json(res.locals.jobs);
 });
 
-router.delete('/deletejob', JobController.deleteJob, (req, res) => {
+router.delete('/deletejob/:id', JobController.deleteJob, (req, res) => {
   res.status(200).json(res.locals.deletedJob);
+});
+
+router.patch('/updatejob', JobController.updateJob, (req, res) => {
+  res.status(200).json(res.locals.updatedJob);
 });
 module.exports = router;

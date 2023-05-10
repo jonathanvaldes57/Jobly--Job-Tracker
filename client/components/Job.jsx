@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import axios from 'axios';
 import {
   Card,
   CardMedia,
@@ -13,79 +14,138 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Button
+  Button,
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import React from 'react';
+import ClearIcon from '@mui/icons-material/Clear';
 
 const styles = {
-    root: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      height: '100vh',
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      overflow: 'hidden',
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100vh',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    overflow: 'hidden',
+  },
+  card: {
+    backgroundColor: 'transparent',
+    backdropFilter: 'blur(24px) brightness(125%)',
+    borderRadius: '8px',
+    maxWidth: '400px',
+    width: '100%',
+    backgroundColor: 'white',
+    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
+    padding: '16px',
+  },
+  input: {
+    marginBottom: '16px',
+  },
+  submitButton: {
+    marginTop: '16px',
+    marginBottom: '8px',
+    backgroundColor: '#227BA5',
+    color: '#ffffff',
+    '&:hover': {
+      backgroundColor: '#1D6490',
     },
-    card: {
-      backgroundColor: 'transparent',
-      backdropFilter: 'blur(24px) brightness(125%)',
-      borderRadius: '8px',
-      maxWidth: '400px',
-      width: '100%',
-      backgroundColor: 'white',
-      boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
-      padding: '16px',
+  },
+  signupLink: {
+    color: '##227BA5',
+    textDecoration: 'none',
+    '&:hover': {
+      textDecoration: 'underline',
     },
-    input: {
-      marginBottom: '16px',
-    },
-    submitButton: {
-      marginTop: '16px',
-      marginBottom: '8px',
-      backgroundColor: '#227BA5',
-      color: '#ffffff',
-      '&:hover': {
-        backgroundColor: '#1D6490',
-      },
-    },
-    signupLink: {
-      color: '##227BA5',
-      textDecoration: 'none',
-      '&:hover': {
-        textDecoration: 'underline',
-      },
-      cursor: 'pointer',
-    },
+    cursor: 'pointer',
+  },
+};
+
+const Job = ({ job, fetching, setFetching }) => {
+  const [open, setOpen] = useState(false);
+  const handleClose = () => setOpen(false);
+  const handleCancel = () => setOpen(false);
+  const [interest_level, setInterest_level] = useState(job.interest_level);
+  const [status, setStatus] = useState(job.status);
+  const [company_name, setCompanyName] = useState(job.company_name);
+  const [job_title, setJob_Title] = useState(job.job_title);
+  const [url, setUrl] = useState(job.url);
+  const [description, setDescription] = useState(job.description);
+  const handleDelete = async () => {
+    try {
+      const result = await axios.delete(`http://localhost:8080/job/deletejob/${job.id}`);
+      
+    } catch (e) {
+      console.log(e);
+    }
+    setFetching(!fetching);
+  };
+  const handleSubmit = async () => {
+    if (!company_name || !job_title || !interest_level || !url || !status) {
+      console.log('here');
+      return;
+    } else {
+      try {
+        const response = await axios.patch(
+          'http://localhost:8080/job/updatejob',
+          {
+            company_name: company_name,
+            job_title: job_title,
+            interest_level: interest_level,
+            status: status,
+            url: url,
+            description: description,
+            users_id: 1,
+            id: job.id,
+          }
+        );
+      } catch (err) {
+        console.log('error in patch to updatejob', err);
+      }
+      setOpen(false);
+      setFetching(!fetching);
+    }
   };
 
-  
-const Job = ({ job }) => {
-    const [open, setOpen] = useState(false)
-    const handleClose = () => setOpen(false)
-    const handleCancel = () => setOpen(false)
-    const handleSubmit = () => console.log('submit')
-    const [interest_level, setInterest_level] = useState(job.interest_level);
-    const [status, setStatus] = useState(job.status);
-    const [company_name, setCompanyName] = useState(job.company_name);
-    const [job_title, setJob_Title] = useState(job.job_title);
-    const [url, setUrl] = useState(job.url);
-    const [description, setDescription] = useState(job.description)
-
-  return ( 
-    <Card sx={{ boxShadow: 3, height: "110px", margin: '10px' }}>
+  return (
+    <Card sx={{ boxShadow: 3, height: '115px', margin: '10px' }}>
       <CardHeader
         title={job.company_name}
         subheader={job.job_title}
         action={
           <IconButton aria-label='settings'>
-            <MoreVertIcon onClick={() => setOpen(true)}/>
+            <MoreVertIcon
+              onClick={() => setOpen(true)}
+              sx={{ '&:hover': { color: 'blue', cursor: 'pointer' } }}
+            />
           </IconButton>
         }
+        sx={{ pb: '0px' }}
       />
-  <Modal
+      <CardContent>
+        <Typography
+          sx={{
+            fontSize: 14,
+            display: 'flex',
+            justifyContent: 'space-between',
+          }}
+          color='text.secondary'
+          gutterBottom
+        >
+          {job.date}
+
+          <ClearIcon
+            sx={{
+              height: '20px',
+              '&:hover': { color: 'red', cursor: 'pointer' },
+            }}
+            onClick={handleDelete}
+          />
+        </Typography>
+      </CardContent>
+      <Modal
         open={open}
         // onClose={handleClose}
         aria-labelledby='modal-modal-title'
@@ -111,7 +171,7 @@ const Job = ({ job }) => {
                 size='small'
                 value={company_name}
                 fullWidth
-                onChange={(e) => setCompany(e.target.value)}
+                onChange={(e) => setCompanyName(e.target.value)}
               />
               <TextField
                 required
@@ -121,7 +181,7 @@ const Job = ({ job }) => {
                 value={job_title}
                 size='small'
                 fullWidth
-                onChange={(e) => setJobTitle(e.target.value)}
+                onChange={(e) => setJob_Title(e.target.value)}
               />
               <TextField
                 required
@@ -131,7 +191,7 @@ const Job = ({ job }) => {
                 size='small'
                 fullWidth
                 value={url}
-                onChange={(e) => setLink(e.target.value)}
+                onChange={(e) => setUrl(e.target.value)}
               />
 
               <FormControl fullWidth>
@@ -144,7 +204,7 @@ const Job = ({ job }) => {
                   value={interest_level}
                   label='Interest Level'
                   size='small'
-                  onChange={(e) => setInterest(e.target.value)}
+                  onChange={(e) => setInterest_level(e.target.value)}
                 >
                   <MenuItem value={1}>1</MenuItem>
                   <MenuItem value={2}>2</MenuItem>
@@ -204,7 +264,6 @@ const Job = ({ job }) => {
         </Box>
       </Modal>
     </Card>
-    
   );
 };
 

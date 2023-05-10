@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Job from '../components/Job.jsx'
+import Job from '../components/Job.jsx';
 import axios from 'axios';
 import {
   Box,
@@ -31,7 +31,7 @@ const styles = {
     height: 'calc(98vh - 64px)',
     border: '1px solid #ccc',
     boxSizing: 'border-box',
-    overflowY: "scroll"
+    overflowY: 'scroll',
   },
   container: {
     marginTop: '58px',
@@ -97,11 +97,17 @@ const Home = () => {
                 <AddIcon />
               </Button>
             </Card>
-           
+
             {jobs.applied?.map((job, index) => {
-                return <Job job={job} key={index} />
-              })}
-             
+              return (
+                <Job
+                  job={job}
+                  key={index}
+                  setFetching={setFetching}
+                  fetching={fetching}
+                />
+              );
+            })}
           </Grid>
           <Grid item xs={3} sx={styles.column}>
             <Card sx={styles.card}>
@@ -121,10 +127,15 @@ const Home = () => {
               </Button>
             </Card>
             {jobs.interview?.map((job, index) => {
-                return <Job job={job} key={index} />
-              })}
-
-
+              return (
+                <Job
+                  job={job}
+                  key={index}
+                  setFetching={setFetching}
+                  fetching={fetching}
+                />
+              );
+            })}
           </Grid>
           <Grid item xs={3} sx={styles.column}>
             <Card sx={styles.card}>
@@ -142,13 +153,18 @@ const Home = () => {
               >
                 <AddIcon />
               </Button>
-              
             </Card>
 
             {jobs.offer?.map((job, index) => {
-                return <Job job={job} key={index} />
-              })}
-        
+              return (
+                <Job
+                  job={job}
+                  key={index}
+                  setFetching={setFetching}
+                  fetching={fetching}
+                />
+              );
+            })}
           </Grid>
           <Grid item xs={3} sx={styles.column}>
             <Card sx={styles.card}>
@@ -169,9 +185,15 @@ const Home = () => {
             </Card>
 
             {jobs.rejected?.map((job, index) => {
-                return <Job job={job} key={index} />
-              })}
-            
+              return (
+                <Job
+                  job={job}
+                  key={index}
+                  setFetching={setFetching}
+                  fetching={fetching}
+                />
+              );
+            })}
           </Grid>
         </Grid>
       </Box>

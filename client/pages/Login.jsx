@@ -16,6 +16,7 @@ import {
   Button,
   TextField,
 } from '@mui/material';
+import { Google } from '@mui/icons-material';
 
 const styles = {
   root: {
@@ -52,7 +53,8 @@ function Login() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const { setUser } = useContext(AuthContext);
-  const handleClick = () => {
+  
+  const handleGoogleClick = () => {
     window.open(`http://localhost:3000/auth/google`, '_self');
   };
 
@@ -94,21 +96,24 @@ function Login() {
           fullWidth
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button sx={{margin: '15px'}} variant='contained' size='large' onClick={handleClick}>
+        <Button sx={{margin: '15px'}} variant='contained' size='large'  >
           Submit
         </Button>
 
-     
-
+{/*      
         <a
           href='http://localhost:3000/auth/google'
           target='_self'
           rel='noopener noreferrer'
+          style={{textDecoration: 'none'}}
         >
-          <Button variant='contained' size='large'>
-            Sign in with Google
-          </Button>
-        </a>
+       */}
+       
+          <GoogleButton style={{marginLeft: '70px'}} onClick={handleGoogleClick}>
+          Sign in with Google 
+          </GoogleButton>
+            
+        {/* </a> */}
 
         <Typography
           sx={{

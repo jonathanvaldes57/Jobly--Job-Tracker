@@ -15,5 +15,15 @@ cookieController.setSSIDCookie = async (req, res, next) => {
   console.log('cookie has been baked');
   return next();
 };
-
+cookieController.setOauthCookie =  (req, res, next) => {
+  console.log('now attempting to create cookie:')
+  const { id } = req.user; // get user ID from req.user.id
+  res.cookie('loggedIn', `${id}`, {
+    httpOnly: false,
+    maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+    
+  });
+  console.log('Cookie has been set: loggedIn=', id);
+   next();
+};
 module.exports = cookieController;

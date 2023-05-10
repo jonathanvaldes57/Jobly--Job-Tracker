@@ -3,6 +3,8 @@ const session = require('express-session');
 const path = require('path');
 const userRouter = require('./routes/userRoutes');
 const jobRouter = require('./routes/jobRoutes');
+const CookieController = require('./controllers/CookieController');
+
 const cors = require('cors');
 require('./auth');
 const passportSetup = require('./auth');
@@ -38,9 +40,12 @@ app.get(
     successRedirect: 'http://localhost:8080/home',
     failureRedirect: '/auth/failure',
   }),
+  CookieController.setOauthCookie,
   (req, res) => {
-    // Save user ID to res.locals
-    res.locals.userId = req.user.id;
+    // Set user ID cookie with a secure and HTTP-only option
+   res.status(200).send('cookie created')
+    // Redirect user to front-end URL
+    
   }
 );
 app.get('/auth/failure', (req, res) => {

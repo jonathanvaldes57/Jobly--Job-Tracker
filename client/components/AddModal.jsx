@@ -3,6 +3,9 @@ import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { DateField } from '@mui/x-date-pickers/DateField';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Modal from '@mui/material/Modal';
 import axios from 'axios';
 import {
@@ -69,12 +72,20 @@ const styles = {
   },
 };
 
-export default function BasicModal({ open, setOpen, option, setOption, setFetching, fetching }) {
+export default function BasicModal({
+  open,
+  setOpen,
+  option,
+  setOption,
+  setFetching,
+  fetching,
+}) {
   const [company, setCompany] = useState('');
   const [jobTitle, setJobTitle] = useState('');
   const [interest, setInterest] = useState('');
   const [link, setLink] = useState('');
-  // const [date, setDate] = useState('');
+  const [description, setDescription] = useState('');
+  const [date, setDate] = useState('');
 
   const handleCancel = () => {
     setOpen(false);
@@ -82,37 +93,40 @@ export default function BasicModal({ open, setOpen, option, setOption, setFetchi
     setJobTitle('');
     setInterest('');
     setLink('');
+    setDescription('');
   };
 
   const handleSubmit = async () => {
     if (!company || !jobTitle || !interest || !link || !option) {
       return;
     } else {
-      try{
-        
-        const response = await axios.post('http://localhost:8080/job/createjob', {company_name: company, job_title: jobTitle, interest_level: interest, status: option, url: link, date: '5/10/23', description: 'some description', users_id: 1})
-
-      }
-      catch(err){
-        console.log('error in post to createjob', err)
+      try {
+        const response = await axios.post(
+          'http://localhost:8080/job/createjob',
+          {
+            company_name: company,
+            job_title: jobTitle,
+            interest_level: interest,
+            status: option,
+            url: link,
+            date: date,
+            description: description,
+            users_id: 1,
+          }
+        );
+      } catch (err) {
+        console.log('error in post to createjob', err);
       }
       setOpen(false);
       setCompany('');
       setJobTitle('');
       setInterest('');
       setLink('');
-      setFetching(!fetching)
+      setDescription('');
+      setFetching(!fetching);
     }
   };
 
-//   const handleClose = () => {
-//     console.log('in herer')
-//     setOpen(false);
-//     setCompany('');
-//     setJobTitle('');
-//     setInterest('');
-//     setLink('');
-//   }
 
   return (
     <div>
@@ -197,6 +211,26 @@ export default function BasicModal({ open, setOpen, option, setOption, setFetchi
                 </Select>
               </FormControl>
 
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DateField
+                  label='Basic date field'
+                  sx={{ marginBottom: '10px' }}
+                  onChange={(e) => setDate(`${e.$M + 1}/${e.$D}/${e.$y}`)}
+                />
+              </LocalizationProvider>
+
+              <TextField
+                required
+                sx={styles.input}
+                label='Description'
+                variant='outlined'
+                size='small'
+                multiline
+                fullWidth
+                value={description}
+                rows={4}
+                onChange={(e) => setDescription(e.target.value)}
+              />
               <Box
                 sx={{
                   display: 'flex',

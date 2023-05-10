@@ -2,7 +2,7 @@ const db = require('../models/job-tracker-Models');
 
 const JobController = {
   async createJob(req, res, next) {
-    console.log('this is reques body', req.body)
+    console.log('this is reques body', req.body);
     const {
       company_name,
       job_title,
@@ -42,7 +42,7 @@ const JobController = {
 
   async getJobs(req, res, next) {
     const { user_id } = req.body;
-    
+
     try {
       const applied = await db.query(
         `
@@ -77,16 +77,50 @@ const JobController = {
     }
   },
   async deleteJob(req, res, next) {
-    const { jobs_id } = req.body;
+    const { id } = req.params;
     try {
       const result = await db.query(
         'DELETE FROM jobs WHERE id = $1 RETURNING *',
-        [jobs_id]
+        [id]
       );
       res.locals.deletedJob = result.rows[0];
-      next();
+      return next();
     } catch (err) {
       console.log('error in getJobs request ', err);
+      return next(err);
+    }
+  },
+
+  async updateJob(req, res, next) {
+    const {
+      company_name,
+      job_title,
+      interest_level,
+      status,
+      url,
+      description,
+      users_id,
+      id,
+    } = req.body;
+
+    try {
+      const result = await db.query(
+        `UPDATE jobs SET company_name = $1, job_title = $2, interest_level = $3, status = $4, url = $5, description = $6, users_id = $7 WHERE id = $8`,
+        [
+          company_name,
+          job_title,
+          interest_level,
+          status,
+          url,
+          description,
+          users_id,
+          id,
+        ]
+      );
+      res.locals.updateJob = result.rows[0];
+      return next();
+    } catch (err) {
+      console.log('error caught in the updateJob middleware function: ', err);
       return next(err);
     }
   },
