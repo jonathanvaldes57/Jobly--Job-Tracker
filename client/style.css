@@ -1,0 +1,10 @@
+.categories{
+    display: flex;
+    justify-content: space-around;
+}
+.section{
+    min-height: 500px;
+    width: 300px;
+    border: 1px, solid, black
+
+}
