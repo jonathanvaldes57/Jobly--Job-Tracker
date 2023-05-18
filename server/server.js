@@ -37,15 +37,13 @@ app.get(
 app.get(
   '/google/callback',
   passport.authenticate('google', {
-    successRedirect: 'http://localhost:8080/home',
     failureRedirect: '/auth/failure',
   }),
-  CookieController.setOauthCookie,
   (req, res) => {
-    // Set user ID cookie with a secure and HTTP-only option
-   res.status(200).send('cookie created')
+    req.session.userID = req.user.id;
+
     // Redirect user to front-end URL
-    
+    res.redirect('http://localhost:8080/home');
   }
 );
 app.get('/auth/failure', (req, res) => {
@@ -71,7 +69,15 @@ app.get('/logout', (req, res) => {
 });
 app.get('/isAuthenticated', (req, res) => {
   if (req.user) {
-    res.send({ authenticated: true });
+    // Set the user ID cookie
+    res.cookie('userID', req.user.id, {
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+      httpOnly: true,
+      // Set to true in production
+      sameSite: 'lax', // Use 'none' if secure is true and you want cross-site cookies
+    });
+
+    res.send({ authenticated: true, user: req.user });
   } else {
     res.send({ authenticated: false });
   }

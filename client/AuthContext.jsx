@@ -14,8 +14,12 @@ export function AuthProvider({ children }) {
         });
 
         if (response.ok) {
-          const userData = await response.json();
-          setUser(userData);
+          const { authenticated, user: userData } = await response.json();
+          if (authenticated) {
+            setUser(userData);
+          } else {
+            setUser(null);
+          }
         } else {
           setUser(null);
         }
